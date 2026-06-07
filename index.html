@@ -1,0 +1,1228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>bogusch@tter</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Bebas+Neue&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --red: #D32F2F;
+      --blue: #1565C0;
+      --ink: #111111;
+      --paper: #F5F2ED;
+      --mid: #888;
+      --border: 2px solid var(--ink);
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Space Mono', monospace;
+      background: var(--paper);
+      color: var(--ink);
+      font-size: 14px;
+      line-height: 1.5;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: sticky;
+      top: 0;
+      z-index: 200;
+      background: var(--paper);
+      border-bottom: var(--border);
+      display: flex;
+      align-items: stretch;
+      height: 52px;
+    }
+
+    .nav-logo {
+      font-family: 'Space Mono', monospace;
+      font-size: 16px;
+      font-weight: 700;
+      letter-spacing: -0.01em;
+      padding: 0 20px;
+      display: flex;
+      align-items: center;
+      border-right: var(--border);
+      text-decoration: none;
+      white-space: nowrap;
+    }
+
+    .nav-logo .bogus  { color: var(--blue); }
+    .nav-logo .chatter { color: var(--red); }
+
+    /* desktop nav links */
+    .nav-links {
+      display: flex;
+      align-items: stretch;
+      list-style: none;
+      margin-left: auto;
+    }
+
+    .nav-links a {
+      display: flex;
+      align-items: center;
+      padding: 0 18px;
+      text-decoration: none;
+      color: var(--ink);
+      font-size: 12px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      border-left: 1px solid var(--ink);
+      transition: background 0.1s;
+      white-space: nowrap;
+    }
+
+    .nav-links a:hover { background: var(--ink); color: var(--paper); }
+
+    /* hamburger button — hidden on desktop */
+    .nav-burger {
+      display: none;
+      flex-direction: column;
+      justify-content: center;
+      gap: 5px;
+      margin-left: auto;
+      padding: 0 18px;
+      background: none;
+      border: none;
+      border-left: 1px solid var(--ink);
+      cursor: pointer;
+      height: 100%;
+    }
+
+    .nav-burger span {
+      display: block;
+      width: 22px;
+      height: 2px;
+      background: var(--ink);
+      transition: transform 0.2s, opacity 0.2s;
+    }
+
+    /* animated X state */
+    .nav-burger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+    .nav-burger.open span:nth-child(2) { opacity: 0; }
+    .nav-burger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+    /* mobile dropdown menu */
+    .nav-mobile-menu {
+      display: none;
+      position: absolute;
+      top: 52px;
+      left: 0;
+      right: 0;
+      background: var(--paper);
+      border-bottom: var(--border);
+      z-index: 199;
+      flex-direction: column;
+    }
+
+    .nav-mobile-menu.open { display: flex; }
+
+    .nav-mobile-menu a {
+      display: block;
+      padding: 16px 20px;
+      text-decoration: none;
+      color: var(--ink);
+      font-size: 13px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      border-bottom: 1px solid var(--ink);
+      transition: background 0.1s;
+    }
+
+    .nav-mobile-menu a:last-child { border-bottom: none; }
+    .nav-mobile-menu a:hover { background: var(--ink); color: var(--paper); }
+
+    /* ── LOAD MORE ── */
+    .load-more-wrap {
+      border-top: var(--border);
+      padding: 32px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 20px;
+    }
+
+    .load-more-btn {
+      padding: 10px 28px;
+      border: var(--border);
+      background: transparent;
+      font-family: 'Space Mono', monospace;
+      font-size: 12px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      cursor: pointer;
+      color: var(--ink);
+      transition: background 0.1s, color 0.1s;
+    }
+
+    .load-more-btn:hover { background: var(--ink); color: var(--paper); }
+
+    .load-more-count {
+      font-size: 11px;
+      color: var(--mid);
+    }
+
+    /* ── GALLERY ── */
+    #work { padding: 0; }
+
+    .gallery-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    }
+
+    .gallery-item {
+      border-bottom: var(--border);
+      border-right: var(--border);
+      cursor: pointer;
+      overflow: hidden;
+      position: relative;
+      aspect-ratio: 1 / 1;
+      background: #ddd;
+    }
+
+    .gallery-item:nth-child(3n) { border-right: none; }
+
+    .gallery-item img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      transition: transform 0.3s ease;
+    }
+
+    .gallery-item:hover img { transform: scale(1.03); }
+
+    .gallery-item-overlay {
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      background: var(--ink);
+      color: var(--paper);
+      padding: 10px 14px;
+      transform: translateY(100%);
+      transition: transform 0.2s ease;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 12px;
+    }
+
+    .gallery-item:hover .gallery-item-overlay { transform: translateY(0); }
+    .gallery-item-overlay .title { font-weight: 700; }
+    .gallery-item-overlay .price { color: var(--paper); } /* white on #111 = 16.1:1 contrast, WCAG AAA */
+
+    .placeholder-tile {
+      width: 100%; height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 13px;
+      letter-spacing: 0.1em;
+      color: #aaa;
+      background: repeating-linear-gradient(45deg, #e8e4de, #e8e4de 10px, #f5f2ed 10px, #f5f2ed 20px);
+    }
+
+    /* ── LIGHTBOX ── */
+    .lightbox {
+      display: none;
+      position: fixed;
+      inset: 0;
+      z-index: 1000;
+      background: rgba(10,10,10,0.95);
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .lightbox.open { display: flex; }
+
+    /* close button */
+    .lightbox-close {
+      position: fixed;
+      top: 16px; right: 20px;
+      background: none;
+      border: none;
+      color: var(--paper);
+      font-size: 28px;
+      cursor: pointer;
+      font-family: 'Space Mono', monospace;
+      line-height: 1;
+      z-index: 10;
+    }
+
+    /* prev / next arrow buttons */
+    .lb-arrow {
+      position: fixed;
+      top: 50%;
+      transform: translateY(-50%);
+      background: none;
+      border: none;
+      color: var(--paper);
+      font-size: 36px;
+      cursor: pointer;
+      padding: 16px 12px;
+      z-index: 10;
+      opacity: 0.6;
+      transition: opacity 0.15s;
+      line-height: 1;
+      user-select: none;
+    }
+
+    .lb-arrow:hover { opacity: 1; }
+    .lb-prev { left: 8px; }
+    .lb-next { right: 8px; }
+
+    /* DESKTOP lightbox — image dominates, text strip below */
+    .lightbox-inner {
+      display: flex;
+      flex-direction: column;
+      width: 100%;
+      height: 100%;
+      max-width: 100vw;
+    }
+
+    .lightbox-img-wrap {
+      flex: 1;
+      min-height: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 48px 80px 24px;
+    }
+
+    .lightbox-img-wrap img {
+      max-width: 100%;
+      max-height: 100%;
+      object-fit: contain;
+      display: block;
+    }
+
+    /* text strip at bottom — 2 col on desktop */
+    .lightbox-info {
+      flex-shrink: 0;
+      background: var(--paper);
+      border-top: var(--border);
+      padding: 20px 80px;
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr auto;
+      align-items: center;
+      gap: 24px;
+    }
+
+    .lightbox-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 24px;
+      letter-spacing: 0.04em;
+      line-height: 1;
+    }
+
+    .lightbox-meta {
+      font-size: 11px;
+      color: var(--mid);
+      line-height: 1.8;
+    }
+
+    .lightbox-desc {
+      font-size: 12px;
+      line-height: 1.7;
+    }
+
+    .lightbox-buy {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 6px;
+    }
+
+    .lightbox-price {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 22px;
+      color: var(--red);
+    }
+
+    .lb-want {
+      font-size: 12px;
+      color: var(--red);
+      text-decoration: underline;
+      text-underline-offset: 3px;
+      font-family: 'Space Mono', monospace;
+      white-space: nowrap;
+    }
+
+    .lb-want:hover { color: var(--blue); }
+
+    /* touch swipe hint dots */
+    .lb-dots {
+      position: fixed;
+      bottom: 14px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      gap: 6px;
+      z-index: 10;
+    }
+
+    .lb-dot {
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.35);
+      transition: background 0.2s;
+    }
+
+    .lb-dot.active { background: #fff; }
+
+    /* ── ABOUT ── */
+    #about {
+      border-top: var(--border);
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+    }
+
+    .about-label {
+      padding: 16px 24px;
+      border-bottom: var(--border);
+      border-right: var(--border);
+      display: flex;
+      align-items: center;
+    }
+
+    .about-label h2 {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 20px;
+      letter-spacing: 0.1em;
+    }
+
+    .about-empty { border-bottom: var(--border); }
+
+    .about-text {
+      grid-column: 1 / -1;
+      padding: 40px 24px;
+      font-size: 15px;
+      line-height: 1.9;
+      border-right: var(--border);
+      max-width: 640px;
+    }
+
+    .about-accent {
+      padding: 40px 24px;
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 80px;
+      line-height: 0.85;
+      color: var(--blue);
+      display: flex;
+      align-items: flex-start;
+    }
+
+    /* ── PRINTS ── */
+    #prints { border-top: var(--border); }
+
+    .prints-header {
+      padding: 16px 24px;
+      border-bottom: var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .prints-header h2 {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 20px;
+      letter-spacing: 0.1em;
+    }
+
+    .prints-body {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      border-bottom: var(--border);
+    }
+
+    .prints-col {
+      padding: 32px 24px;
+      font-size: 13px;
+      line-height: 1.8;
+    }
+
+    .prints-col:first-child { border-right: var(--border); }
+
+    .prints-col h3 {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 18px;
+      letter-spacing: 0.08em;
+      margin-bottom: 10px;
+      color: var(--red);
+    }
+
+    .prints-col a { color: var(--blue); }
+
+    /* ── NEWSLETTER ── */
+    #newsletter { border-top: var(--border); }
+
+    .newsletter-inner {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+    }
+
+    .newsletter-copy {
+      padding: 32px 24px;
+      border-right: var(--border);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 10px;
+    }
+
+    .newsletter-copy h2 {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 20px;
+      letter-spacing: 0.1em;
+    }
+
+    .newsletter-copy p {
+      font-size: 13px;
+      line-height: 1.8;
+      color: var(--mid);
+      max-width: 360px;
+    }
+
+    .newsletter-copy p strong {
+      color: var(--ink);
+      font-weight: 700;
+    }
+
+    .newsletter-form {
+      padding: 32px 24px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 12px;
+    }
+
+    .newsletter-form input[type="email"] {
+      width: 100%;
+      padding: 12px;
+      border: var(--border);
+      background: transparent;
+      font-family: 'Space Mono', monospace;
+      font-size: 13px;
+      color: var(--ink);
+    }
+
+    .newsletter-form input[type="email"]:focus { outline: 3px solid var(--blue); }
+
+    .newsletter-btn {
+      display: inline-block;
+      padding: 10px 18px;
+      border: var(--border);
+      background: var(--blue);
+      color: var(--paper);
+      font-family: 'Space Mono', monospace;
+      font-size: 12px;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      cursor: pointer;
+      align-self: flex-start;
+      transition: background 0.1s;
+    }
+
+    .newsletter-btn:hover { background: var(--ink); border-color: var(--ink); }
+
+    .newsletter-fine {
+      font-size: 11px;
+      color: var(--mid);
+      line-height: 1.6;
+    }
+
+    @media (max-width: 640px) {
+      .newsletter-inner { grid-template-columns: 1fr; }
+      .newsletter-copy { border-right: none; border-bottom: var(--border); }
+    }
+
+    /* ── CONTACT ── */
+    #contact { border-top: var(--border); }
+
+    .contact-header {
+      padding: 16px 24px;
+      border-bottom: var(--border);
+    }
+
+    .contact-header h2 {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 20px;
+      letter-spacing: 0.1em;
+    }
+
+    .contact-body {
+      padding: 40px 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      max-width: 520px;
+    }
+
+    .contact-body input,
+    .contact-body textarea {
+      width: 100%;
+      padding: 12px;
+      border: var(--border);
+      background: transparent;
+      font-family: 'Space Mono', monospace;
+      font-size: 13px;
+      color: var(--ink);
+      resize: vertical;
+    }
+
+    .contact-body input:focus,
+    .contact-body textarea:focus { outline: 3px solid var(--blue); }
+
+    .contact-body textarea { min-height: 120px; }
+
+    .contact-btn {
+      display: inline-block;
+      padding: 10px 18px;
+      border: var(--border);
+      background: var(--ink);
+      color: var(--paper);
+      font-family: 'Space Mono', monospace;
+      font-size: 12px;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      cursor: pointer;
+      align-self: flex-start;
+      transition: background 0.1s;
+    }
+
+    .contact-btn:hover { background: var(--blue); border-color: var(--blue); }
+
+    /* ── FOOTER ── */
+    footer {
+      border-top: var(--border);
+      padding: 20px 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 11px;
+      color: var(--mid);
+    }
+
+    footer strong { color: var(--red); }
+
+    /* ── MOBILE ── */
+    @media (max-width: 640px) {
+      /* swap to hamburger */
+      .nav-links { display: none; }
+      .nav-burger { display: flex; }
+
+      .gallery-grid { grid-template-columns: repeat(2, 1fr); }
+      .gallery-item:nth-child(3n) { border-right: var(--border); }
+      .gallery-item:nth-child(2n) { border-right: none; }
+
+      /* mobile lightbox — image fills width, text stacked below */
+      .lightbox-img-wrap { padding: 52px 16px 16px; }
+      .lb-arrow { font-size: 28px; padding: 12px 8px; }
+      .lb-prev { left: 0; }
+      .lb-next { right: 0; }
+
+      .lightbox-info {
+        grid-template-columns: 1fr 1fr;
+        padding: 16px 20px;
+        gap: 12px;
+      }
+
+      .lightbox-title { font-size: 20px; grid-column: 1 / -1; }
+      .lightbox-desc  { grid-column: 1 / -1; font-size: 12px; }
+      .lightbox-buy   { align-items: flex-end; }
+
+      #about { grid-template-columns: 1fr; }
+      .about-label { border-right: none; }
+      .about-empty { display: none; }
+      .about-accent { font-size: 56px; border-top: var(--border); }
+      .prints-body { grid-template-columns: 1fr; }
+      .prints-col:first-child { border-right: none; border-bottom: var(--border); }
+      nav { height: 48px; }
+      .nav-mobile-menu { top: 48px; }
+    }
+  </style>
+</head>
+<body>
+
+<nav>
+  <a class="nav-logo" href="#"><span class="bogus">bogus</span><span class="chatter">ch@tter</span></a>
+
+  <!-- desktop links -->
+  <ul class="nav-links">
+    <li><a href="#work">work</a></li>
+    <li><a href="#about">about</a></li>
+    <li><a href="#prints">prints</a></li>
+    <li><a href="#newsletter">newsletter</a></li>
+    <li><a href="#contact">contact</a></li>
+  </ul>
+
+  <!-- hamburger toggle -->
+  <button class="nav-burger" id="nav-burger" aria-label="Menu" aria-expanded="false">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<!-- mobile dropdown -->
+<div class="nav-mobile-menu" id="nav-mobile-menu" role="navigation">
+  <a href="#work"    id="mnav-work">work</a>
+  <a href="#about"   id="mnav-about">about</a>
+  <a href="#prints"      id="mnav-prints">prints</a>
+  <a href="#newsletter"  id="mnav-newsletter">newsletter</a>
+  <a href="#contact"     id="mnav-contact">contact</a>
+</div>
+
+<!-- GALLERY -->
+<section id="work">
+  <div class="gallery-grid" id="gallery"></div>
+  <div class="load-more-wrap" id="load-more-wrap" style="display:none;">
+    <button class="load-more-btn" id="load-more-btn">load more</button>
+    <span class="load-more-count" id="load-more-count"></span>
+  </div>
+</section>
+
+<!-- LIGHTBOX -->
+<div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="Image detail">
+  <button class="lightbox-close" id="lb-close" aria-label="Close">✕</button>
+  <button class="lb-arrow lb-prev" id="lb-prev" aria-label="Previous">&#8592;</button>
+  <button class="lb-arrow lb-next" id="lb-next" aria-label="Next">&#8594;</button>
+
+  <div class="lightbox-inner">
+    <div class="lightbox-img-wrap">
+      <img id="lb-img" src="" alt="" />
+    </div>
+    <div class="lightbox-info">
+      <div class="lightbox-title" id="lb-title"></div>
+      <div class="lightbox-meta"  id="lb-meta"></div>
+      <div class="lightbox-desc"  id="lb-desc"></div>
+      <div class="lightbox-buy">
+        <div class="lightbox-price" id="lb-price"></div>
+        <a id="lb-inquire" href="#" class="lb-want">i want this</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="lb-dots" id="lb-dots"></div>
+</div>
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="about-label"><h2>ABOUT</h2></div>
+  <div class="about-empty"></div>
+  <div class="about-text">
+    <p>Making stuff out of other stuff. Trying to tell some stories. Beer boxes, scrap cardboard, house paint, acrylics, ink, paste, sharpie and the junk drawer in my head.</p>
+   </p>
+  </div>
+  <div class="about-accent">RAW<br>WORK</div>
+</section>
+
+<!-- PRINTS -->
+<section id="prints">
+  <div class="prints-header"><h2>ORIGINALS + PRINTS</h2></div>
+  <div class="prints-body">
+    <div class="prints-col">
+      <h3>originals</h3>
+      <p>Each piece is a one-of-one. Recycled substrate, hand-painted, unique. Tap any work — we can sort out shipping and price from there.</p>
+    </div>
+    <div class="prints-col">
+      <h3>prints</h3>
+      <p>If an original is gone, prints may be available — archival quality, handled with care. Inquire via the contact form and mention the piece.</p>
+    </div>
+  </div>
+</section>
+
+<!-- NEWSLETTER -->
+<section id="newsletter">
+  <div class="newsletter-inner">
+    <div class="newsletter-copy">
+      <h2>JOIN THE PARTY</h2>
+      <p>Sign up for <strong>human-made</strong> email updates, and get notified when new work drops.</p>
+    </div>
+    <div class="newsletter-form">
+      <form
+        action="https://buttondown.com/api/emails/embed-subscribe/boguschatter"
+        method="post"
+        target="popupwindow"
+        onsubmit="window.open('https://buttondown.com/boguschatter','popupwindow')"
+        style="display:contents"
+      >
+        <input
+          type="email"
+          name="email"
+          id="bd-email"
+          placeholder="your@email.com"
+          aria-label="Email address for newsletter"
+          required
+        />
+        <button type="submit" class="newsletter-btn">sign me up</button>
+        <p class="newsletter-fine">unsubscribe any time. your email stays here, full stop.</p>
+      </form>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="contact-header"><h2>CONTACT</h2></div>
+  <div class="contact-body">
+    <input type="text"  placeholder="name"  aria-label="Your name" />
+    <input type="email" placeholder="email" aria-label="Your email" />
+    <textarea placeholder="what's up — piece you want, question, whatever" aria-label="Message"></textarea>
+    <button class="contact-btn">send it</button>
+  </div>
+</section>
+
+<footer>
+  <span>bogusch<strong>@</strong>tter — boguschatter.com</span>
+  <span>all works original</span>
+</footer>
+
+<script>
+  /* =============================================
+     WORKS DATA
+     — paste NEW work at the TOP of this list
+     — id format: "YYYY-NN" (year + count that year)
+     — display order = array order, top = first in gallery
+     ============================================= */
+  const works = [
+    {
+      id: "keep climbing",
+      title: "how to climb out of a hole",
+      file: "images/how_to_climb_out_of_a_hole.jpg",
+      medium: "chalk, ink, cardboard",
+      dims: "medium",
+      available: true,
+      price: "inquire",
+      desc: "Get out the hole. Make yourself heard."
+    },
+    {
+      id: "leroy",
+      title: "leroy was here",
+      file: "images/leroy_wuz_here.jpg",
+      medium: "ink, flat interior latex paint, cardboard",
+      dims: "medium",
+      available: true,
+      price: "inquire",
+      desc: "Cat ghosts hang around the longest."
+    },
+    {
+      id: "walker",
+      title: "pedestrian inconvenience (nothing to see here)",
+      file: "images/pedestrian_inconvenience.jpg",
+      medium: "cardboard, chalk, flat interior latex paint, ink",
+      dims: "medium",
+      available: true,
+      price: "inquire",
+      desc: "Lookout below, the consumer cometh."
+    },
+    {
+      id: "robomonkey",
+      title: "rainbow robot helper monkey",
+      file: "images/rainbow_robot_helper_monkey.jpg",
+      medium: "beer box, chalk, sharpie, ink",
+      dims: "large",
+      available: true,
+      price: "inquire",
+      desc: "Smart robot head, super-strong monkey body with useful tail."
+    },
+    {
+      id: "robotkit",
+      title: "robo destroyer kit",
+      file: "images/robot_destroyer_kit.jpg",
+      medium: "garlic bread box, ink, flat interior latex paint",
+      dims: "medium",
+      available: true,
+      price: "inquire",
+      desc: "Come get some."
+    },
+    {
+      id: "mummy",
+      title: "mummy unravelling mid-jump over the rainbow poppies",
+      file: "images/skateboard_mummy_unravelling_over_rainbow_poppies.jpg",
+      medium: "cardboard, ink, chalk, flat interior latex paint",
+      dims: "medium",
+      available: true,
+      price: "inquire",
+      desc: "Tie your shit up before you jump."
+    },
+    {
+      id: "eternal fight",
+      title: "sweet science",
+      file: "images/sweet_science.jpg",
+      medium: "beer box, ink, flat interior latex paint",
+      dims: "medium",
+      available: true,
+      price: "inquire",
+      desc: "Round 16,607. Keep it clean."
+    },
+    {
+      id: "timeworm",
+      title: "the exact moment the worm turned",
+      file: "images/the_exact_moment_the_worm_turned.jpg",
+      medium: "sample ballot, highlighter, sharpie",
+      dims: "ballot size",
+      available: false,
+      price: "sold",
+      desc: "In hindsight it was easy to nail down when, almost to the hour, but as it happened the change went completely unnoticed."
+    },
+    {
+      id: "heads up",
+      title: "updates available",
+      file: "images/updates_available.jpg",
+      medium: "cardboard frozen food box, ink, flat interior latex paint",
+      dims: "smallish",
+      available: true,
+      price: "inquire",
+      desc: "No unread messages. OS update available. Restart required."
+    },
+    {
+      id: "wholesome",
+      title: "wholesome",
+      file: "images/wholesome.jpg",
+      medium: "beer box, ink, flat interior latex paint",
+      dims: "medium",
+      available: true,
+      price: "inquire",
+      desc: "Positively pure, ridiculously healthy*. Grab a bowl today!"
+    },
+    {
+      id: "scream",
+      title: "amplified scream",
+      file: "images/amplify_your_scream.JPG",
+      medium: "pizza box, chalk, flat interior latex paint, sharpie",
+      dims: "medium",
+      available: true,
+      price: "inquire",
+      desc: "When ready, make yourself heard."
+    },
+    {
+      id: "bluenun",
+      title: "the blue nun",
+      file: "images/blue_nun.JPG",
+      medium: "frozen foods box, chalk, flat interior latex paint, sharpie",
+      dims: "medium",
+      available: true,
+      price: "inquire",
+      desc: "Surrounded by ecstasy. It must be the wine."
+    },
+    {
+      id: "bridgebuilder",
+      title: "bridging the gap",
+      file: "images/bridging_the_gap.JPG",
+      medium: "beer box, chalk, flat interior latex paint, sharpie",
+      dims: "medium",
+      available: true,
+      price: "inquire",
+      desc: "Gotta help each other over this thing."
+    },
+    {
+      id: "bigcat",
+      title: "cat guardian 2",
+      file: "images/cat_guardian_2.JPG",
+      medium: "frozen food box, chalk, sharpie",
+      dims: "medium",
+      available: true,
+      price: "inquire",
+      desc: "Feed your friends."
+    },
+    {
+      id: "race",
+      title: "flash vs. silver surfer in a race across the pacific ocean!",
+      file: "images/flash_vs_silver_surfer.JPG",
+      medium: "cardboard, chalk, flat interior latex paint, sharpie",
+      dims: "medium",
+      available: true,
+      price: "inquire",
+      desc: "Who wins this? Let's discuss."
+    },
+    {
+      id: "fightfight",
+      title: "fighter",
+      file: "images/fighter.JPG",
+      medium: "cardboard, notebook paper, post-its, ink, highlighter",
+      dims: "small",
+      available: true,
+      price: "inquire",
+      desc: "Ready to fight. Not scared to death."
+    },
+    {
+      id: "sicklove",
+      title: "lovedemic",
+      file: "images/lovedemic.JPG",
+      medium: "contractor paper, pastel, charcoal",
+      dims: "large",
+      available: true,
+      price: "inquire",
+      desc: "Masks block many things, but not everything."
+    },
+    {
+      id: "birdmask",
+      title: "luck fallout bird",
+      file: "images/lucky_fallout_bird.JPG",
+      medium: "contractor paper, pastel, charcoal",
+      dims: "large",
+      available: true,
+      price: "inquire",
+      desc: "It is heartening to see a bird amidst the apocalypse."
+    },
+    {
+      id: "foxfox",
+      title: "fox",
+      file: "images/fox.JPG",
+      medium: "printer paper, charcoal",
+      dims: "small",
+      available: true,
+      price: "inquire",
+      desc: "Charcoal single-swoop sketch. Snowy."
+    },
+    {
+      id: "hulksmash",
+      title: "sleeping hulk nude",
+      file: "images/hulk.JPG",
+      medium: "contractor paper, charcoal, pastel",
+      dims: "large",
+      available: true,
+      price: "inquire",
+      desc: "Hulk not smash."
+    },
+    {
+      id: "sharp",
+      title: "looking sharp",
+      file: "images/looking_sharp.JPG",
+      medium: "cardboard, post-it, flat interior latex paint, charcoal, pastel, sharpie",
+      dims: "medium",
+      available: true,
+      price: "inquire",
+      desc: "Elvish dude lookin' sharp."
+    },
+    {
+      id: "ratking",
+      title: "king rat",
+      file: "images/king_rat.JPG",
+      medium: "cardboard, construction paper, magazine, sharpie",
+      dims: "small",
+      available: true,
+      price: "inquire",
+      desc: "Few people know rat is the reason elephant became king."
+    },
+    {
+      id: "shine",
+      title: "shine a light",
+      file: "images/shine_a_light.JPG",
+      medium: "notebook paper, highlighter, pen",
+      dims: "small",
+      available: true,
+      price: "bid what you like",
+      desc: "Help shine a light for everyone else. All the light you can manage."
+    },
+    {
+      id: "rainbows",
+      title: "spontaneous localized rainbows",
+      file: "images/spontaneous_localized_rainbows.JPG",
+      medium: "glossy printer paper, marker, sharpie",
+      dims: "small",
+      available: true,
+      price: "bid what you like",
+      desc: "Sometimes things work out comfortably."
+    },
+    {
+      id: "pigperil",
+      title: "pissed pig",
+      file: "images/pissed_pig.JPG",
+      medium: "notebook paper, pen",
+      dims: "small",
+      available: true,
+      price: "$5",
+      desc: "Pig like wtf."
+    },
+  ];
+
+  /* ── HAMBURGER ── */
+  const burger   = document.getElementById('nav-burger');
+  const mobileMenu = document.getElementById('nav-mobile-menu');
+
+  function closeMenu() {
+    burger.classList.remove('open');
+    mobileMenu.classList.remove('open');
+    burger.setAttribute('aria-expanded', 'false');
+  }
+
+  burger.addEventListener('click', () => {
+    const isOpen = mobileMenu.classList.toggle('open');
+    burger.classList.toggle('open', isOpen);
+    burger.setAttribute('aria-expanded', String(isOpen));
+  });
+
+  // close on any mobile nav link tap
+  mobileMenu.querySelectorAll('a').forEach(a => a.addEventListener('click', closeMenu));
+
+  /* ── GALLERY BUILD (paginated) ── */
+  const gallery       = document.getElementById('gallery');
+  const loadMoreWrap  = document.getElementById('load-more-wrap');
+  const loadMoreBtn   = document.getElementById('load-more-btn');
+  const loadMoreCount = document.getElementById('load-more-count');
+  const PAGE_SIZE     = 12;
+  let   visibleCount  = 0;
+
+  function makeGalleryItem(work, idx) {
+    const item = document.createElement('div');
+    item.className = 'gallery-item';
+    item.setAttribute('role', 'button');
+    item.setAttribute('tabindex', '0');
+    item.setAttribute('aria-label', 'View ' + work.title);
+    item.innerHTML = `
+      <img src="${work.file}" alt="${work.title}" loading="lazy"
+           onerror="this.style.display='none';this.nextElementSibling.style.display='flex';" />
+      <div class="placeholder-tile" style="display:none;">[ ${work.title} ]</div>
+      <div class="gallery-item-overlay">
+        <span class="title">${work.title}</span>
+        <span class="price">${work.price}</span>
+      </div>
+    `;
+    item.addEventListener('click', () => openLightbox(idx));
+    item.addEventListener('keydown', e => { if (e.key === 'Enter') openLightbox(idx); });
+    return item;
+  }
+
+  function loadPage() {
+    const nextBatch = works.slice(visibleCount, visibleCount + PAGE_SIZE);
+    nextBatch.forEach((work, i) => {
+      gallery.appendChild(makeGalleryItem(work, visibleCount + i));
+    });
+    visibleCount += nextBatch.length;
+
+    const remaining = works.length - visibleCount;
+    if (remaining > 0) {
+      loadMoreWrap.style.display = 'flex';
+      loadMoreCount.textContent  = `${remaining} more`;
+    } else {
+      loadMoreWrap.style.display = 'none';
+    }
+  }
+
+  loadPage(); // render first page on load
+  loadMoreBtn.addEventListener('click', loadPage);
+
+  /* ── LIGHTBOX ── */
+  const lightbox  = document.getElementById('lightbox');
+  const lbImg     = document.getElementById('lb-img');
+  const lbTitle   = document.getElementById('lb-title');
+  const lbMeta    = document.getElementById('lb-meta');
+  const lbDesc    = document.getElementById('lb-desc');
+  const lbPrice   = document.getElementById('lb-price');
+  const lbDots    = document.getElementById('lb-dots');
+  let currentIdx  = 0;
+
+  // build dots
+  works.forEach((_, i) => {
+    const dot = document.createElement('div');
+    dot.className = 'lb-dot';
+    dot.setAttribute('aria-hidden', 'true');
+    lbDots.appendChild(dot);
+  });
+
+  function updateDots(idx) {
+    lbDots.querySelectorAll('.lb-dot').forEach((d, i) => {
+      d.classList.toggle('active', i === idx);
+    });
+  }
+
+  function populateLightbox(idx) {
+    const work = works[idx];
+    lbImg.src   = work.file;
+    lbImg.alt   = work.title;
+    lbTitle.textContent = work.title.toUpperCase();
+    lbMeta.innerHTML    = `${work.medium}<br>${work.dims}`;
+    lbDesc.textContent  = work.desc;
+    lbPrice.textContent = work.available ? work.price : 'sold';
+    updateDots(idx);
+
+    // build mailto — pre-fill subject + body with piece info
+    const subject = encodeURIComponent(`inquiry: ${work.title}`);
+    const body = encodeURIComponent(
+      `hi,\n\ni'm interested in "${work.title}".\n\n` +
+      `medium: ${work.medium}\n` +
+      `size: ${work.dims}\n` +
+      `listed price: ${work.available ? work.price : 'sold — inquiring about print'}\n\n` +
+      `[your message here]`
+    );
+    const lbInquire = document.getElementById('lb-inquire');
+    lbInquire.href = `mailto:boguschatter@gmail.com?subject=${subject}&body=${body}`;
+    lbInquire.textContent = work.available ? 'i want this' : 'inquire about print';
+    lbInquire.style.display = 'inline';
+  }
+
+  function openLightbox(idx) {
+    currentIdx = idx;
+    populateLightbox(currentIdx);
+    lightbox.classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeLightbox() {
+    lightbox.classList.remove('open');
+    document.body.style.overflow = '';
+  }
+
+  function prevWork() {
+    currentIdx = (currentIdx - 1 + works.length) % works.length;
+    populateLightbox(currentIdx);
+  }
+
+  function nextWork() {
+    currentIdx = (currentIdx + 1) % works.length;
+    populateLightbox(currentIdx);
+  }
+
+  document.getElementById('lb-close').addEventListener('click', closeLightbox);
+  document.getElementById('lb-prev').addEventListener('click', prevWork);
+  document.getElementById('lb-next').addEventListener('click', nextWork);
+
+  lightbox.addEventListener('click', e => {
+    if (e.target === lightbox) closeLightbox();
+  });
+
+  document.addEventListener('keydown', e => {
+    if (!lightbox.classList.contains('open')) return;
+    if (e.key === 'Escape')     closeLightbox();
+    if (e.key === 'ArrowLeft')  prevWork();
+    if (e.key === 'ArrowRight') nextWork();
+  });
+
+  /* touch swipe on lightbox image */
+  let touchStartX = 0;
+
+  lightbox.addEventListener('touchstart', e => {
+    touchStartX = e.changedTouches[0].clientX;
+  }, { passive: true });
+
+  lightbox.addEventListener('touchend', e => {
+    const dx = e.changedTouches[0].clientX - touchStartX;
+    if (Math.abs(dx) > 40) dx < 0 ? nextWork() : prevWork();
+  }, { passive: true });
+
+  /* ── CONTACT FORM ── */
+  document.querySelector('.contact-body .contact-btn').addEventListener('click', function() {
+    const fields = document.querySelectorAll('.contact-body input, .contact-body textarea');
+    let ok = true;
+    fields.forEach(f => {
+      if (!f.value.trim()) { ok = false; f.style.outline = '3px solid #D32F2F'; }
+      else { f.style.outline = ''; }
+    });
+    if (ok) {
+      this.textContent = 'sent ✓';
+      this.style.background = '#1565C0';
+      fields.forEach(f => f.value = '');
+    }
+  });
+</script>
+
+</body>
+</html>
