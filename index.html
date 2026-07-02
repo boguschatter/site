@@ -37,6 +37,11 @@
       background: var(--paper);
       border-bottom: var(--border);
       display: flex;
+      flex-direction: column;
+    }
+
+    .nav-bar {
+      display: flex;
       align-items: stretch;
       height: 52px;
     }
@@ -112,13 +117,8 @@
     /* mobile dropdown menu */
     .nav-mobile-menu {
       display: none;
-      position: absolute;
-      top: 52px;
-      left: 0;
-      right: 0;
       background: var(--paper);
-      border-bottom: var(--border);
-      z-index: 199;
+      border-top: var(--border);
       flex-direction: column;
     }
 
@@ -645,39 +645,42 @@
       .about-accent { font-size: 56px; border-top: var(--border); }
       .prints-body { grid-template-columns: 1fr; }
       .prints-col:first-child { border-right: none; border-bottom: var(--border); }
-      nav { height: 48px; }
-      .nav-mobile-menu { top: 48px; }
+      nav { height: auto; }
+      .nav-bar { height: 48px; }
     }
   </style>
 </head>
 <body>
 
 <nav>
-  <a class="nav-logo" href="#"><span class="bogus">bogus</span><span class="chatter">ch@tter</span></a>
+  <div class="nav-bar">
+    <a class="nav-logo" href="#"><span class="bogus">bogus</span><span class="chatter">ch@tter</span></a>
 
-  <!-- desktop links -->
-  <ul class="nav-links">
-    <li><a href="#work">work</a></li>
-    <li><a href="#about">about</a></li>
-    <li><a href="#prints">prints</a></li>
-    <li><a href="#newsletter">newsletter</a></li>
-    <li><a href="#contact">contact</a></li>
-  </ul>
+    <!-- desktop links -->
+    <ul class="nav-links">
+      <li><a href="#work">work</a></li>
+      <li><a href="#about">about</a></li>
+      <li><a href="#prints">prints</a></li>
+      <li><a href="#newsletter">newsletter</a></li>
+      <li><a href="#contact">contact</a></li>
+    </ul>
 
-  <!-- hamburger toggle -->
-  <button class="nav-burger" id="nav-burger" aria-label="Menu" aria-expanded="false">
-    <span></span><span></span><span></span>
-  </button>
+    <!-- hamburger toggle -->
+    <button class="nav-burger" id="nav-burger" aria-label="Menu" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+
+  <!-- mobile dropdown — inside nav so it stays sticky -->
+  <div class="nav-mobile-menu" id="nav-mobile-menu" role="navigation">
+    <a href="#work">work</a>
+    <a href="#about">about</a>
+    <a href="#prints">prints</a>
+    <a href="#newsletter">newsletter</a>
+    <a href="#contact">contact</a>
+  </div>
 </nav>
 
-<!-- mobile dropdown -->
-<div class="nav-mobile-menu" id="nav-mobile-menu" role="navigation">
-  <a href="#work"    id="mnav-work">work</a>
-  <a href="#about"   id="mnav-about">about</a>
-  <a href="#prints"      id="mnav-prints">prints</a>
-  <a href="#newsletter"  id="mnav-newsletter">newsletter</a>
-  <a href="#contact"     id="mnav-contact">contact</a>
-</div>
 
 <!-- GALLERY -->
 <section id="work">
@@ -974,7 +977,7 @@
     },
     {
       id: "birdmask",
-      title: "lucky fallout bird",
+      title: "luck fallout bird",
       file: "images/lucky_fallout_bird.jpg",
       medium: "contractor paper, pastel, charcoal",
       dims: "large",
